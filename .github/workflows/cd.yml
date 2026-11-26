@@ -37,7 +37,7 @@ jobs:
           SHA="${{ github.event.workflow_run.head_sha || github.sha }}"
           echo "tag=sha-${SHA:0:7}" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       # 1) Construir la imagen localmente (sin publicar todavía)
       - name: Construir imagen

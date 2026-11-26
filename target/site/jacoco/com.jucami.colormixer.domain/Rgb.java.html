@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rgb.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">color-mixer</a> &gt; <a href="index.source.html" class="el_package">com.jucami.colormixer.domain</a> &gt; <span class="el_source">Rgb.java</span></div><h1>Rgb.java</h1><pre class="source lang-java linenums">package com.jucami.colormixer.domain;
+
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+/**
+ * Color en el espacio RGB (cada canal de 0 a 255).
+ */
+public record Rgb(int r, int g, int b) {
+
+<span class="fc" id="L11">    private static final Pattern HEX = Pattern.compile(&quot;^#?[0-9a-fA-F]{6}$&quot;);</span>
+
+<span class="fc" id="L13">    public Rgb {</span>
+<span class="fc" id="L14">        validar(&quot;r&quot;, r);</span>
+<span class="fc" id="L15">        validar(&quot;g&quot;, g);</span>
+<span class="fc" id="L16">        validar(&quot;b&quot;, b);</span>
+<span class="fc" id="L17">    }</span>
+
+    private static void validar(String canal, int valor) {
+<span class="fc bfc" id="L20" title="All 4 branches covered.">        if (valor &lt; 0 || valor &gt; 255) {</span>
+<span class="fc" id="L21">            throw new IllegalArgumentException(</span>
+                    &quot;El canal &quot; + canal + &quot; debe estar entre 0 y 255, se recibió &quot; + valor);
+        }
+<span class="fc" id="L24">    }</span>
+
+    /** Crea un color a partir de un texto &quot;#RRGGBB&quot; o &quot;RRGGBB&quot;. */
+    public static Rgb fromHex(String hex) {
+<span class="fc bfc" id="L28" title="All 4 branches covered.">        if (hex == null || !HEX.matcher(hex.trim()).matches()) {</span>
+<span class="fc" id="L29">            throw new IllegalArgumentException(&quot;Formato hexadecimal inválido: &quot; + hex);</span>
+        }
+<span class="fc" id="L31">        String limpio = hex.trim().replace(&quot;#&quot;, &quot;&quot;);</span>
+<span class="fc" id="L32">        return new Rgb(</span>
+<span class="fc" id="L33">                Integer.parseInt(limpio.substring(0, 2), 16),</span>
+<span class="fc" id="L34">                Integer.parseInt(limpio.substring(2, 4), 16),</span>
+<span class="fc" id="L35">                Integer.parseInt(limpio.substring(4, 6), 16));</span>
+    }
+
+    public static boolean isHex(String texto) {
+<span class="fc bfc" id="L39" title="All 4 branches covered.">        return texto != null &amp;&amp; HEX.matcher(texto.trim()).matches();</span>
+    }
+
+    public String toHex() {
+<span class="fc" id="L43">        return String.format(Locale.ROOT, &quot;#%02X%02X%02X&quot;, r, g, b);</span>
+    }
+
+    /** Distancia euclídea al cuadrado entre dos colores (para buscar el más cercano). */
+    public int distanceSquared(Rgb otro) {
+<span class="fc" id="L48">        int dr = r - otro.r;</span>
+<span class="fc" id="L49">        int dg = g - otro.g;</span>
+<span class="fc" id="L50">        int db = b - otro.b;</span>
+<span class="fc" id="L51">        return dr * dr + dg * dg + db * db;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

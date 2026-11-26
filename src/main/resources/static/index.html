@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mezclador de colores</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 560px; margin: 40px auto; padding: 0 16px; color: #222; }
+    .fila { display: flex; gap: 12px; align-items: center; margin: 12px 0; }
+    input[type=color] { width: 64px; height: 48px; border: none; background: none; }
+    #resultado { width: 100%; height: 120px; border-radius: 12px; border: 1px solid #ccc; margin-top: 16px; }
+    button { padding: 8px 16px; }
+    code { background: #f2f2f2; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Mezclador de colores</h1>
+  <p>Elige 2 o 3 colores y el tipo de mezcla.</p>
+  <div class="fila">
+    <input type="color" id="c1" value="#ff0000">
+    <input type="color" id="c2" value="#0000ff">
+    <label><input type="checkbox" id="usar3"> 3.er color</label>
+    <input type="color" id="c3" value="#ffff00">
+  </div>
+  <div class="fila">
+    <select id="modo">
+      <option value="PINTURA">Pintura (pigmentos)</option>
+      <option value="LUZ">Luz (pantalla)</option>
+    </select>
+    <button id="mezclar">Mezclar</button>
+  </div>
+  <div id="resultado"></div>
+  <p id="texto"></p>
+  <script>
+    document.getElementById('mezclar').addEventListener('click', async () => {
+      const ids = ['c1', 'c2'];
+      if (document.getElementById('usar3').checked) ids.push('c3');
+      const colores = ids.map(id => document.getElementById(id).value).join(',');
+      const modo = document.getElementById('modo').value;
+      const url = '/api/colores/mezclar?colores=' + encodeURIComponent(colores) + '&modo=' + modo;
+      const resp = await fetch(url);
+      const data = await resp.json();
+      const texto = document.getElementById('texto');
+      if (!resp.ok) { texto.textContent = data.detail; return; }
+      document.getElementById('resultado').style.background = data.hex;
+      texto.innerHTML = 'Resultado: <code>' + data.hex + '</code> ≈ <strong>' + data.nombreAproximado + '</strong>';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+color-mixer,com.jucami.colormixer.domain,MixMode,0,15,0,0,0,3,0,1,0,1
+color-mixer,com.jucami.colormixer.domain,ColorParser,0,30,0,6,0,7,0,5,0,2
+color-mixer,com.jucami.colormixer.domain,Rgb,0,146,0,12,0,22,0,13,0,7
+color-mixer,com.jucami.colormixer.domain,ColorMixer,0,461,0,30,0,79,0,23,0,8
+color-mixer,com.jucami.colormixer.domain,NamedColors,0,196,0,6,0,32,0,8,0,5
+color-mixer,com.jucami.colormixer.api,ApiExceptionHandler,0,24,0,0,0,8,0,3,0,3
+color-mixer,com.jucami.colormixer.api,MixResponse,0,24,0,0,0,1,0,1,0,1
+color-mixer,com.jucami.colormixer.api,ColorController,1,84,1,1,0,19,1,6,0,6
+color-mixer,com.jucami.colormixer,ColorMixerApplication,5,7,0,0,2,2,1,2,1,2

@@ -1,0 +1,698 @@
+{
+  "info": {
+    "_postman_id": "9cad2ed1-d536-4951-b3a9-4159fbb92c89",
+    "name": "color-mixer API",
+    "description": "Pruebas funcionales de la API del mezclador de colores. Se ejecutan en el pipeline con Newman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Prueba común a todas las peticiones: rendimiento básico",
+          "pm.test(\"Tiempo de respuesta < 1000 ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Disponibilidad",
+      "item": [
+        {
+          "name": "Health check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"La aplicación está UP\", () => pm.expect(pm.response.json().status).to.eql(\"UP\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Paleta de colores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const paleta = pm.response.json();",
+                  "pm.test(\"Contiene los colores primarios\", () => {",
+                  "  pm.expect(paleta.rojo).to.eql(\"#FF0000\");",
+                  "  pm.expect(paleta.amarillo).to.eql(\"#FFFF00\");",
+                  "  pm.expect(paleta.azul).to.eql(\"#0000FF\");",
+                  "});",
+                  "pm.test(\"Todos los valores son hexadecimales #RRGGBB\", () => {",
+                  "  Object.values(paleta).forEach(v => pm.expect(v).to.match(/^#[0-9A-F]{6}$/));",
+                  "});",
+                  "pm.collectionVariables.set(\"totalColores\", Object.keys(paleta).length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Mezclas de pintura",
+      "item": [
+        {
+          "name": "Amarillo + azul = verde",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #00FF00\", () => pm.expect(body.hex).to.eql(\"#00FF00\"));",
+                  "pm.test(\"Nombre aproximado: verde\", () => pm.expect(body.nombreAproximado).to.eql(\"verde\"));",
+                  "pm.test(\"Modo PINTURA\", () => pm.expect(body.modo).to.eql(\"PINTURA\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=amarillo,azul",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "amarillo,azul"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Rojo + azul = morado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #FF00FF\", () => pm.expect(body.hex).to.eql(\"#FF00FF\"));",
+                  "pm.test(\"Nombre aproximado: morado\", () => pm.expect(body.nombreAproximado).to.eql(\"morado\"));",
+                  "pm.test(\"Modo PINTURA\", () => pm.expect(body.modo).to.eql(\"PINTURA\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,azul&modo=pintura",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,azul"
+                },
+                {
+                  "key": "modo",
+                  "value": "pintura"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Rojo + amarillo = naranja",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #FF8000\", () => pm.expect(body.hex).to.eql(\"#FF8000\"));",
+                  "pm.test(\"Nombre aproximado: naranja\", () => pm.expect(body.nombreAproximado).to.eql(\"naranja\"));",
+                  "pm.test(\"Modo PINTURA\", () => pm.expect(body.modo).to.eql(\"PINTURA\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,amarillo&modo=pintura",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,amarillo"
+                },
+                {
+                  "key": "modo",
+                  "value": "pintura"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Rojo + blanco = rosa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #FF8080\", () => pm.expect(body.hex).to.eql(\"#FF8080\"));",
+                  "pm.test(\"Nombre aproximado: rosa\", () => pm.expect(body.nombreAproximado).to.eql(\"rosa\"));",
+                  "pm.test(\"Modo PINTURA\", () => pm.expect(body.modo).to.eql(\"PINTURA\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,blanco&modo=pintura",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,blanco"
+                },
+                {
+                  "key": "modo",
+                  "value": "pintura"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Mezclas de luz",
+      "item": [
+        {
+          "name": "Rojo + verde = amarillo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #FFFF00\", () => pm.expect(body.hex).to.eql(\"#FFFF00\"));",
+                  "pm.test(\"Nombre aproximado: amarillo\", () => pm.expect(body.nombreAproximado).to.eql(\"amarillo\"));",
+                  "pm.test(\"Modo LUZ\", () => pm.expect(body.modo).to.eql(\"LUZ\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,verde&modo=luz",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,verde"
+                },
+                {
+                  "key": "modo",
+                  "value": "luz"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "RGB en hexadecimal = blanco",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Respuesta JSON\", () => pm.response.to.be.json);",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Color resultante #FFFFFF\", () => pm.expect(body.hex).to.eql(\"#FFFFFF\"));",
+                  "pm.test(\"Nombre aproximado: blanco\", () => pm.expect(body.nombreAproximado).to.eql(\"blanco\"));",
+                  "pm.test(\"Modo LUZ\", () => pm.expect(body.modo).to.eql(\"LUZ\"));",
+                  "pm.test(\"Canales RGB coherentes con el hex\", () => {",
+                  "  const hex = \"#\" + [body.r, body.g, body.b].map(v => v.toString(16).padStart(2, \"0\")).join(\"\").toUpperCase();",
+                  "  pm.expect(hex).to.eql(body.hex);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=%23FF0000,%2300FF00,%230000FF&modo=luz",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "%23FF0000,%2300FF00,%230000FF"
+                },
+                {
+                  "key": "modo",
+                  "value": "luz"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Validaciones y errores",
+      "item": [
+        {
+          "name": "Color desconocido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Formato Problem Details (RFC 7807)\", () => {",
+                  "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/problem+json\");",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql(400);",
+                  "  pm.expect(body.title).to.eql(\"Petición inválida\");",
+                  "});",
+                  "pm.test(\"Mensaje explica el error\", () => pm.expect(pm.response.json().detail).to.include(\"turquesa\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,turquesa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,turquesa"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Más de 3 colores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Formato Problem Details (RFC 7807)\", () => {",
+                  "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/problem+json\");",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql(400);",
+                  "  pm.expect(body.title).to.eql(\"Petición inválida\");",
+                  "});",
+                  "pm.test(\"Mensaje explica el error\", () => pm.expect(pm.response.json().detail).to.include(\"entre 2 y 3\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,azul,verde,negro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,azul,verde,negro"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Un solo color",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Formato Problem Details (RFC 7807)\", () => {",
+                  "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/problem+json\");",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql(400);",
+                  "  pm.expect(body.title).to.eql(\"Petición inválida\");",
+                  "});",
+                  "pm.test(\"Mensaje explica el error\", () => pm.expect(pm.response.json().detail).to.include(\"entre 2 y 3\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Modo inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Formato Problem Details (RFC 7807)\", () => {",
+                  "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/problem+json\");",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql(400);",
+                  "  pm.expect(body.title).to.eql(\"Petición inválida\");",
+                  "});",
+                  "pm.test(\"Mensaje explica el error\", () => pm.expect(pm.response.json().detail).to.include(\"PINTURA o LUZ\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar?colores=rojo,azul&modo=acuarela",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ],
+              "query": [
+                {
+                  "key": "colores",
+                  "value": "rojo,azul"
+                },
+                {
+                  "key": "modo",
+                  "value": "acuarela"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Falta el parámetro colores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Formato Problem Details (RFC 7807)\", () => {",
+                  "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/problem+json\");",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql(400);",
+                  "  pm.expect(body.title).to.eql(\"Petición inválida\");",
+                  "});",
+                  "pm.test(\"Mensaje explica el error\", () => pm.expect(pm.response.json().detail).to.include(\"colores\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/colores/mezclar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "colores",
+                "mezclar"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

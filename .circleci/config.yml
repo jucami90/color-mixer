@@ -1,0 +1,52 @@
+# Pipeline de la actividad 1, adaptado a Java/Spring Boot
+version: 2.1
+
+jobs:
+  build-test:
+    docker:
+      - image: cimg/openjdk:21.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - maven-{{ checksum "pom.xml" }}
+      - run:
+          name: Pruebas unitarias, de integración y cobertura
+          command: mvn -B verify
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-{{ checksum "pom.xml" }}
+      - store_test_results:
+          path: target/surefire-reports
+      - store_test_results:
+          path: target/failsafe-reports
+      - store_artifacts:
+          path: target/site/jacoco
+          destination: cobertura
+
+  docker:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build and Push Docker
+          command: |
+            IMAGE_NAME=color-mixer
+            TAG=${CIRCLE_SHA1:0:7}
+            docker build -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
+            echo "$DOCKER_PWD" | docker login -u "$DOCKER_LOGIN" --password-stdin
+            docker push $DOCKER_LOGIN/$IMAGE_NAME:$TAG
+
+workflows:
+  main:
+    jobs:
+      - build-test
+      - docker:
+          requires:
+            - build-test
+          filters:
+            branches:
+              only: main

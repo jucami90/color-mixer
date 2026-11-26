@@ -1,0 +1,11 @@
+# Excepciones de seguridad aceptadas (risk acceptance). Revisar antes de la fecha "exp".
+#
+# Spring Framework 6.2.x (Spring Boot 3.5) ya no recibe parches open source; la corrección
+# está en Spring Framework 7.0.9 (Spring Boot 4.x). Mientras se planifica la migración,
+# se aceptan estas dos vulnerabilidades porque la aplicación NO usa las funciones afectadas.
+
+# RCE en XsltView: la app no usa vistas XSLT (solo devuelve JSON con @RestController).
+CVE-2026-47884 exp:2027-03-31
+
+# Corrupción de stream en Server-Sent Events con vistas: la app no usa SSE.
+CVE-2026-47890 exp:2027-03-31

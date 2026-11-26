@@ -25,7 +25,7 @@
         <pitest.version>1.18.2</pitest.version>
         <pitest-junit5.version>1.2.3</pitest-junit5.version>
         <!-- Umbral mínimo de cobertura de líneas (quality gate) -->
-        <coverage.minimum>0.80</coverage.minimum>
+        <coverage.minimum>0.99</coverage.minimum>
     </properties>
 
     <dependencies>

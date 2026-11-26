@@ -8,7 +8,7 @@ COPY src ./src
 RUN mvn -B -q package -DskipTests
 
 # ---------- Etapa 2: imagen final mínima ----------
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
 # Usuario sin privilegios (no ejecutar como root)

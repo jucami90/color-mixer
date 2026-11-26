@@ -170,7 +170,7 @@
                     <targetTests>
                         <param>com.jucami.colormixer.domain.*Test</param>
                     </targetTests>
-                    <mutationThreshold>60</mutationThreshold>
+                    <mutationThreshold>99</mutationThreshold>
                     <outputFormats>
                         <param>HTML</param>
                         <param>XML</param>

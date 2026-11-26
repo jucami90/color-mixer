@@ -1,9 +1,9 @@
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/ColorMixerApplication.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/api/ApiExceptionHandler.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/api/ColorController.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/api/MixResponse.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/domain/ColorMixer.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/domain/ColorParser.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/domain/MixMode.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/domain/NamedColors.java
-/Users/jucami90/Documents/DevSecOps/Tarea modulo 2/Proyecto pipeline/color-mixer/src/main/java/com/jucami/colormixer/domain/Rgb.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/ColorMixerApplication.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/api/ApiExceptionHandler.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/api/ColorController.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/api/MixResponse.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/domain/ColorMixer.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/domain/ColorParser.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/domain/MixMode.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/domain/NamedColors.java
+/home/runner/work/color-mixer/color-mixer/src/main/java/com/jucami/colormixer/domain/Rgb.java

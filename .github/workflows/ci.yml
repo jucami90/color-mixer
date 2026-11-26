@@ -17,7 +17,7 @@ jobs:
     name: Compilar y probar
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v4
         with:
@@ -58,7 +58,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v4
         with:
@@ -105,7 +105,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -124,7 +124,7 @@ jobs:
     name: Análisis de dependencias y secretos (Trivy)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # v0.35.0 es la única versión no afectada por el ataque de cadena de suministro de marzo de 2026.
       # Buena práctica: fijar la acción por SHA de commit en lugar de por etiqueta.
       - uses: aquasecurity/trivy-action@v0.35.0

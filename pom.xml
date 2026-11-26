@@ -20,8 +20,8 @@
     <properties>
         <java.version>21</java.version>
         <jacoco.version>0.8.13</jacoco.version>
-        <pitest.version>1.17.0</pitest.version>
-        <pitest-junit5.version>1.2.1</pitest-junit5.version>
+        <pitest.version>1.18.2</pitest.version>
+        <pitest-junit5.version>1.2.3</pitest-junit5.version>
         <!-- Umbral mínimo de cobertura de líneas (quality gate) -->
         <coverage.minimum>0.80</coverage.minimum>
     </properties>
@@ -39,6 +39,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Alinea la versión del launcher de JUnit con la de Spring Boot (lo necesita PIT) -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

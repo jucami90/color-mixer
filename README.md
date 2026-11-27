@@ -1,6 +1,6 @@
 # color-mixer
 
-Calculadora de mezcla de colores con Spring Boot 3 y Java 21. Mezcla 2 o 3 colores en dos modos:
+Calculadora de mezcla de colores con Spring Boot 4 y Java 21. Mezcla 2 o 3 colores en dos modos:
 
 - **PINTURA** (pigmentos, modelo RYB): rojo + azul = morado, amarillo + azul = verde, rojo + amarillo = naranja.
 - **LUZ** (pantallas, RGB aditivo): rojo + verde = amarillo, rojo + verde + azul = blanco.

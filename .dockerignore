@@ -1,0 +1,12 @@
+# Solo pom.xml y src/ son necesarios para construir la imagen
+target/
+.git/
+.github/
+.circleci/
+.idea/
+*.iml
+.vscode/
+newman/
+postman/
+*.md
+.DS_Store
